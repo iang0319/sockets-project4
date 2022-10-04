@@ -398,9 +398,9 @@ class _ToDoListState extends State<ToDoList> {
   final Key key2 = const Key("Sets");
   final Key key3 = const Key("Reps");
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Colors.orange);
+      textStyle: const TextStyle(fontSize: 20), primary: Color.fromARGB(255, 213, 107, 19));
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Colors.red);
+      textStyle: const TextStyle(fontSize: 20), primary: Color.fromARGB(255, 213, 107, 19));
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
     print("Loading Dialog");
