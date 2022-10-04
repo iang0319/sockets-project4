@@ -1,115 +1,557 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/workout_items.dart';
+import 'package:flutter_application_1/connection.dart';
+import 'package:flutter_application_1/text.dart';
+import 'dart:io';
+
+import 'package:network_info_plus/network_info_plus.dart';
+
+import 'connections_list.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MaterialApp(
+      home: MyApp(), // becomes the route named '/'
+      routes: <String, WidgetBuilder>{
+        '/join': (BuildContext context) =>
+            JoinPage(title: 'Join Page'), //Join Page
+        '/build': (BuildContext context) => ToDoList(), //Build Page
+        '/home': (BuildContext context) =>
+            HomePage(title: 'Leveler'), //Home Page
+      },
+    ),
+  );
 }
 
+//Test comment
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Movement Pro App',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(
+              Colors.orange,
+            ), //button color
+            foregroundColor: MaterialStateProperty.all<Color>(
+              Colors.white,
+            ),
+          ),
+        ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(title: 'Movement Pro'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
+//Build Homepage Here
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State createState() => _HomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
-  void _incrementCounter() {
+  // onPressed move to these states/pages
+  void _openBuild() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ToDoList(),
+      ),
+    );
+  }
+
+  void _openJoin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const JoinPage(title: 'Join Page'),
+      ),
+    );
+  }
+
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    //things
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            // create buttons that would navigate to each page (build or Join)
+            SizedBox(
+              width: 300, // <-- Your width
+              height: 100,
+              child: ElevatedButton(
+                key: const Key('BButton'),
+                onPressed: _openBuild,
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 30)),
+                child: const Text('Build a Workout'),
+              ),
+            ),
+            const SizedBox(
+              width: 300,
+              height: 50,
+              child: Text('Welcome to Movement Pro'),
+            ),
+            SizedBox(
+              width: 300, // <-- Your width
+              height: 100,
+              child: ElevatedButton(
+                key: const Key('JButton'),
+                onPressed: _openJoin,
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(fontSize: 30)),
+                child: const Text('Join a Workout'),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+//Build Join Page Here
+class JoinPage extends StatefulWidget {
+  const JoinPage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State createState() => _JoinPageState();
+}
+
+//page needs an alert Dialogue first for password authentication
+//Then needs to display workout sent from server
+class _JoinPageState extends State<JoinPage> {
+  String? _ipaddress = "Loading...";
+  bool _isObscure = true;
+  late StreamSubscription<Socket> server_sub;
+  late Friends _friends;
+  late List<DropdownMenuItem<String>> _friendList;
+  late TextEditingController _nameController,
+      _ipController,
+      _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    _friends = Friends();
+    _nameController = TextEditingController();
+    _ipController = TextEditingController();
+    _passwordController = TextEditingController();
+    _setupServer();
+    _findIPAddress();
+  }
+
+  Future<void> _setupServer() async {
+    try {
+      ServerSocket server =
+          await ServerSocket.bind(InternetAddress.anyIPv4, ourPort);
+      server_sub = server.listen(_listenToSocket); // StreamSubscription<Socket>
+    } on SocketException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error: $e"),
+      ));
+    }
+  }
+
+  void _listenToSocket(Socket socket) {
+    socket.listen((data) {
+      setState(() {
+        _handleIncomingMessage(socket.remoteAddress.address, data);
+      });
+    });
+  }
+
+  void _handleIncomingMessage(String ip, Uint8List incomingData) {
+    String received = String.fromCharCodes(incomingData);
+    print("Received '$received' from '$ip'");
+    _friends.receiveFrom(ip, received);
+  }
+
+  void addNew() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      _friends.add(_nameController.text, _ipController.text);
+    });
+  }
+
+  final ButtonStyle yesStyle = ElevatedButton.styleFrom(
+      textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.green);
+  final ButtonStyle noStyle = ElevatedButton.styleFrom(
+      textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.red);
+
+  //Get IP Address of device
+  Future<void> _findIPAddress() async {
+    // Thank you https://stackoverflow.com/questions/52411168/how-to-get-device-ip-in-dart-flutter
+    String? ip = await NetworkInfo().getWifiIP();
+    setState(() {
+      _ipaddress = "My IP: " + ip!;
+    });
+  }
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    print("Loading Dialog");
+    _nameController.text = "";
+    _ipController.text = "";
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Add A Friend'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextEntry(
+                    width: 200,
+                    label: "Name",
+                    inType: TextInputType.text,
+                    controller: _nameController),
+                TextEntry(
+                    width: 200,
+                    label: "IP Address",
+                    inType: TextInputType.number,
+                    controller: _ipController),
+              ],
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                key: const Key("CancelButton"),
+                style: noStyle,
+                child: const Text('Cancel'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                key: const Key("OKButton"),
+                style: yesStyle,
+                child: const Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    addNew();
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _enterPassword(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Enter Password Here"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                    controller: _passwordController,
+                    obscureText: _isObscure,
+                    decoration: InputDecoration(
+                      labelText: 'Enter Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(_isObscure
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        },
+                      ),
+                    )),
+              ],
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                key: const Key("CancelButton"),
+                style: noStyle,
+                child: const Text('Cancel'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                key: const Key("OKButton"),
+                style: yesStyle,
+                child: const Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    addNew();
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<void> _viewConnections() async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              children: _friends.map((name) {
+                return FriendListItem(
+                  friend: _friends.getFriend(name)!,
+                  //onListTapped: _handleChat,
+                  //onListEdited: _handleEditFriend,
+                );
+              }).toList());
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        foregroundColor: Colors.white,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+                onPressed: () async {
+                  await _displayTextInputDialog(context);
+                },
+                child: const Text("Make connection")),
+            ElevatedButton(
+              child: const Text('Enter Password'),
+              onPressed: () async {
+                await _enterPassword(context);
+              },
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await _viewConnections();
+                },
+                child: const Text("View Connections"))
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+          padding: EdgeInsets.all(10),
+          child: Container(
+              width: double.infinity,
+              child: Text(
+                _ipaddress!,
+                textAlign: TextAlign.center,
+              ))),
+    );
+  }
+}
+
+//Workout or Build page, based on ToDoList App
+class ToDoList extends StatefulWidget {
+  const ToDoList({super.key});
+
+  @override
+  State createState() => _ToDoListState();
+}
+
+class _ToDoListState extends State<ToDoList> {
+  // Dialog with text from https://www.appsdeveloperblog.com/alert-dialog-with-a-text-field-in-flutter/
+  final TextEditingController _inputController = TextEditingController();
+  final TextEditingController _setsController = TextEditingController();
+  final TextEditingController _repsController = TextEditingController();
+  final Key key1 = const Key("Exercise");
+  final Key key2 = const Key("Sets");
+  final Key key3 = const Key("Reps");
+  final ButtonStyle yesStyle = ElevatedButton.styleFrom(
+      textStyle: const TextStyle(fontSize: 20), primary: Colors.orange);
+  final ButtonStyle noStyle = ElevatedButton.styleFrom(
+      textStyle: const TextStyle(fontSize: 20), primary: Colors.red);
+
+  Future<void> _displayTextInputDialog(BuildContext context) async {
+    print("Loading Dialog");
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Add exercise'),
+            content: Column(children: <Widget>[
+              Text("Exercise"),
+              TextField(
+                key: Key('exKey'),
+                onChanged: (value) {
+                  setState(() {
+                    valueText = value;
+                  });
+                },
+                controller: _inputController,
+                decoration: const InputDecoration(hintText: "type"),
+              ),
+              Text("Sets"),
+              TextField(
+                key: Key('setsKey'),
+                onChanged: (value2) {
+                  setState(() {
+                    sets = value2;
+                  });
+                },
+                controller: _setsController,
+                decoration: const InputDecoration(hintText: "type"),
+              ),
+              Text("Reps"),
+              TextField(
+                key: Key('repsKey'),
+                onChanged: (value3) {
+                  setState(() {
+                    reps = value3;
+                  });
+                },
+                controller: _repsController,
+                decoration: const InputDecoration(hintText: "type"),
+              )
+            ]),
+            actions: <Widget>[
+              ElevatedButton(
+                key: const Key("OkButton"),
+                style: yesStyle,
+                child: const Text('Add'),
+                onPressed: () {
+                  setState(() {
+                    _handleNewItem(valueText, sets, reps);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+
+              // https://stackoverflow.com/questions/52468987/how-to-turn-disabled-button-into-enabled-button-depending-on-conditions
+              ValueListenableBuilder<TextEditingValue>(
+                valueListenable: _inputController,
+                builder: (context, value, child) {
+                  return ElevatedButton(
+                    key: const Key("CancelButton"),
+                    style: noStyle,
+                    onPressed: value.text.isNotEmpty
+                        ? () {
+                            setState(() {
+                              Navigator.pop(context);
+                            });
+                          }
+                        : null,
+                    child: const Text('Cancel'),
+                  );
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  String valueText = "";
+
+  String sets = "";
+
+  String reps = "";
+
+  final List<Workout> workouts = [
+    const Workout(name: "Example", reps: "5", sets: "3")
+  ];
+
+  final _workoutSet = <Workout>{};
+
+  void _handleListChanged(Workout workout, bool completed) {
+    setState(() {
+      // When a user changes what's in the list, you need
+      // to change _itemSet inside a setState call to
+      // trigger a rebuild.
+      // The framework then calls build, below,
+      // which updates the visual appearance of the app.
+
+      workouts.remove(workout);
+      if (!completed) {
+        print("Completing");
+        _workoutSet.add(workout);
+        workouts.add(workout);
+      } else {
+        print("Making Undone");
+        _workoutSet.remove(workout);
+        workouts.insert(0, workout);
+      }
+    });
+  }
+
+  void _handleDeleteItem(Item item) {
+    setState(() {
+      print("Deleting item");
+    });
+  }
+
+  void _handleNewItem(String itemText, String set, String rep) {
+    setState(() {
+      print("Adding new item");
+      Workout workout_base = Workout(name: itemText, reps: rep, sets: set);
+      workouts.insert(0, workout_base);
+      _inputController.clear();
+      _setsController.clear();
+      _repsController.clear();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+        appBar: AppBar(
+          title: const Text('Workout Creator'),
+          backgroundColor: Colors.orange,
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+        body: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          children: workouts.map((workout) {
+            return ToDoListItem(
+              workout: workout,
+              completed: _workoutSet.contains(workout),
+              onListChanged: _handleListChanged,
+              onDeleteItem: _handleDeleteItem,
+            );
+          }).toList(),
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: const Icon(Icons.add),
+            onPressed: () {
+              _displayTextInputDialog(context);
+            }));
   }
 }
