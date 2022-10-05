@@ -267,6 +267,7 @@ class _JoinPageState extends State<JoinPage> {
         });
   }
 
+  //Found out how to make password icon at https://www.kindacode.com/article/flutter-show-hide-password-in-textfield-textformfield/
   Future<void> _enterPassword(BuildContext context) {
     return showDialog(
         context: context,
@@ -486,11 +487,11 @@ class _ToDoListState extends State<ToDoList> {
 
   String reps = "";
 
-  final List<Workout> workouts = [
+  static final List<Workout> workouts = [
     const Workout(name: "Example", reps: "5", sets: "3")
   ];
 
-  final _workoutSet = <Workout>{};
+  static final _workoutSet = <Workout>{};
 
   void _handleListChanged(Workout workout, bool completed) {
     setState(() {
