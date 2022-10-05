@@ -38,13 +38,14 @@ class MyApp extends StatelessWidget {
       title: 'Movement Pro App',
       theme: ThemeData(
         primarySwatch: Colors.orange,
+        //figure out how to use ARGB here
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.orange,
+              Color.fromARGB(255, 213, 107, 19),
             ), //button color
             foregroundColor: MaterialStateProperty.all<Color>(
-              Colors.white,
+              Colors.black,
             ),
           ),
         ),
@@ -89,19 +90,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+//Homesceen
   Widget build(BuildContext context) {
     // TODO: implement build
     //things
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        foregroundColor: Colors.white,
+        //top banner colors
+        backgroundColor: Color.fromARGB(255, 213, 107, 19),
+        foregroundColor: Colors.black,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // create buttons that would navigate to each page (build or Join)
             SizedBox(
               width: 300, // <-- Your width
               height: 100,
@@ -535,7 +538,7 @@ class _ToDoListState extends State<ToDoList> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Workout Creator'),
-          backgroundColor: Colors.orange,
+          backgroundColor: Color.fromARGB(255, 213, 107, 19),
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
