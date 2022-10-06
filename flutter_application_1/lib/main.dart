@@ -352,17 +352,20 @@ class _JoinPageState extends State<JoinPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
+                key: const Key("Connection"),
                 onPressed: () async {
                   await _displayTextInputDialog(context);
                 },
                 child: const Text("Make connection")),
             ElevatedButton(
+              key: const Key("Password"),
               child: const Text('Enter Password'),
               onPressed: () async {
                 await _enterPassword(context);
               },
             ),
             ElevatedButton(
+                key: const Key("View Connections"),
                 onPressed: () async {
                   await _viewConnections();
                 },
