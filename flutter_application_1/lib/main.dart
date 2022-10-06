@@ -558,12 +558,20 @@ class _ToDoListState extends State<ToDoList> {
         ),
         bottomNavigationBar: Padding(
             padding: EdgeInsets.all(10),
-            child: ElevatedButton(
-                onPressed: _increment,
-                child: const Text(
-                  "Save Workout",
-                  textAlign: TextAlign.center,
-                ))),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ElevatedButton(
+                  onPressed: _increment,
+                  child: const Text(
+                    "Save Workout",
+                    textAlign: TextAlign.center,
+                  )),
+              ElevatedButton(
+                  onPressed: _increment,
+                  child: const Text(
+                    "Send Workout",
+                    textAlign: TextAlign.center,
+                  ))
+            ])),
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
