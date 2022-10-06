@@ -11,20 +11,31 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_application_1/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Build workout button goes to workout creator screen',
+      (tester) async {
+    await tester
+        .pumpWidget(const MaterialApp(home: HomePage(title: "Movement Pro")));
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    expect(find.byKey(const Key('BButton')), findsNWidgets(1));
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.byKey(Key('BButton')));
+
     await tester.pump();
+    await tester.pump();
+    expect(find.byType(ToDoList), findsOneWidget);
+  });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  testWidgets('Join workout button goes to the join workout screen',
+      (tester) async {
+    await tester
+        .pumpWidget(const MaterialApp(home: HomePage(title: "Movement Pro")));
+
+    expect(find.byKey(const Key('JButton')), findsNWidgets(1));
+
+    await tester.tap(find.byKey(Key('JButton')));
+
+    await tester.pump();
+    await tester.pump();
+    expect(find.byType(JoinPage), findsOneWidget);
   });
 }
