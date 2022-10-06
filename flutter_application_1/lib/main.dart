@@ -105,33 +105,44 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //change to containers
-            SizedBox(
+            Container(
               width: 300, // <-- Your width
               height: 100,
               child: ElevatedButton(
                 key: const Key('BButton'),
                 onPressed: _openBuild,
                 style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30)),
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      ),
+                      elevation: 25,
+                      shadowColor: Color.fromARGB(255, 118, 118, 118)
+                      ),
                 child: const Text('Build a Workout'),
-              ),
-            ),
+              ),),
+
             const SizedBox(
               width: 300,
               height: 50,
               child: Text('Welcome to Movement Pro'),
             ),
-            SizedBox(
+            Container(
               width: 300, // <-- Your width
               height: 100,
               child: ElevatedButton(
                 key: const Key('JButton'),
                 onPressed: _openJoin,
                 style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30)),
-                child: const Text('Join a Workout'),
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      ),
+                      elevation: 25,
+                      shadowColor: Color.fromARGB(255, 118, 118, 118)
+                      ),
+                child: const Text('Join a Workout'),),
               ),
-            ),
           ],
         ),
       ),
