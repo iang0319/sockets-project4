@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
       title: 'Movement Pro App',
       theme: ThemeData(
         primarySwatch: Colors.orange,
-        //figure out how to use ARGB here
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
@@ -105,6 +104,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            //change to containers
             SizedBox(
               width: 300, // <-- Your width
               height: 100,
