@@ -38,4 +38,19 @@ void main() {
     await tester.pump();
     expect(find.byType(JoinPage), findsOneWidget);
   });
+
+  testWidgets('There are 3 buttons on the join workout page', (tester) async {
+    await tester
+        .pumpWidget(const MaterialApp(home: HomePage(title: "Movement Pro")));
+
+    expect(find.byKey(const Key('BButton')), findsNWidgets(1));
+
+    await tester.tap(find.byKey(Key('JButton')));
+
+    await tester.pump();
+    await tester.pump();
+    expect(find.byKey(const Key("Connection")), findsOneWidget);
+    expect(find.byKey(const Key("Password")), findsOneWidget);
+    expect(find.byKey(const Key("View Connections")), findsOneWidget);
+  });
 }
