@@ -121,12 +121,10 @@ class _HomePageState extends State<HomePage> {
                       ),
                 child: const Text('Build a Workout'),
               ),),
-
-            const SizedBox(
+            Container(
               width: 300,
-              height: 50,
-              child: Text('Welcome to Movement Pro'),
-            ),
+              height: 100,
+            ),  
             Container(
               width: 300, // <-- Your width
               height: 100,
