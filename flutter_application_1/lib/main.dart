@@ -562,12 +562,6 @@ class _ToDoListState extends State<ToDoList> {
               ElevatedButton(
                   onPressed: _increment,
                   child: const Text(
-                    "Save Workout",
-                    textAlign: TextAlign.center,
-                  )),
-              ElevatedButton(
-                  onPressed: _increment,
-                  child: const Text(
                     "Send Workout",
                     textAlign: TextAlign.center,
                   ))
