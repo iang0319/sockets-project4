@@ -104,7 +104,14 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            //change to containers
+            Image.asset('assets/images/MP.pnc.jpeg',
+              width: 500,
+              height: 300,
+            ),
+            Container(
+              width: 300,
+              height: 100,
+            ),
             Container(
               width: 300, // <-- Your width
               height: 100,
