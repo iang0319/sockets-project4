@@ -450,6 +450,7 @@ class _ToDoListState extends State<ToDoList> {
               Text("Sets"),
               TextField(
                 key: Key('setsKey'),
+                keyboardType: TextInputType.number,
                 onChanged: (value2) {
                   setState(() {
                     sets = value2;
@@ -461,6 +462,7 @@ class _ToDoListState extends State<ToDoList> {
               Text("Reps"),
               TextField(
                 key: Key('repsKey'),
+                keyboardType: TextInputType.number,
                 onChanged: (value3) {
                   setState(() {
                     reps = value3;
@@ -556,6 +558,8 @@ class _ToDoListState extends State<ToDoList> {
     });
   }
 
+  void _increment() {}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -574,6 +578,16 @@ class _ToDoListState extends State<ToDoList> {
             );
           }).toList(),
         ),
+        bottomNavigationBar: Padding(
+            padding: EdgeInsets.all(10),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              ElevatedButton(
+                  onPressed: _increment,
+                  child: const Text(
+                    "Send Workout",
+                    textAlign: TextAlign.center,
+                  ))
+            ])),
         floatingActionButton: FloatingActionButton(
             child: const Icon(Icons.add),
             onPressed: () {
