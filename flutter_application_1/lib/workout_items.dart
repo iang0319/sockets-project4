@@ -22,28 +22,9 @@ class ToDoListItem extends StatelessWidget {
   }) : super(key: ObjectKey(workout));
 
   Workout workout;
-  final bool completed;
-  final ToDoListChangedCallback onListChanged;
-  final ToDoListRemovedCallback onDeleteItem;
-
-  //really not sure about this
-  //These two functions should make it interactable when sent
-  Map<String, dynamic> toJson() => {
-        'workout': workout,
-        'completed': completed,
-        'changed': onListChanged,
-        'deleted': onDeleteItem,
-        //'title': _title,
-        //'workout': _workout,
-      };
-
-  ToDoListItem.fromJson(Map<String, dynamic> json)
-      : workout = json['workout'],
-        completed = json['completed'],
-        onListChanged = json['onListChanged'],
-        onDeleteItem = json['onDeleteItem'];
-  //_title = json['title'],
-  //_workout = json['workout'];
+  bool completed;
+  ToDoListChangedCallback onListChanged;
+  ToDoListRemovedCallback onDeleteItem;
 
   Color _getColor(BuildContext context) {
     // The theme depends on the BuildContext because different
@@ -113,28 +94,25 @@ class ToDoListItem extends StatelessWidget {
 
 class Workout {
   Workout({required this.name, required this.reps, required this.sets});
-  final String name;
-  final String sets;
-  final String reps;
+  String name;
+  String sets;
+  String reps;
 
   String abbrev() {
     return name.substring(0, 1);
   }
 
-  /*
-  String get this.name => _name;
-  String get title => _title;
-  Workout get workout => _workout;
+  //got this from the test messenger example app
+// found here: https://github.com/ethan-thomas0223/text_messenger/blob/master/lib/serializer.dart
 
   Map<String, dynamic> toJson() => {
-        'name': _name,
-        'title': _title,
-        'workout': _workout,
+        'name': name,
+        'sets': sets,
+        'reps': reps,
       };
 
-  User.fromJson(Map<String, dynamic> json)
-      : _name = json['name'],
-        _title = json['title'],
-        _workout = json['workout'];
-  */
+  Workout.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        sets = json['title'],
+        reps = json['workout'];
 }
