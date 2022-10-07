@@ -41,10 +41,10 @@ class MyApp extends StatelessWidget {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(
-              Colors.orange,
+              Color.fromARGB(255, 213, 107, 19),
             ), //button color
             foregroundColor: MaterialStateProperty.all<Color>(
-              Colors.white,
+              Colors.black,
             ),
           ),
         ),
@@ -89,46 +89,58 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+//Homesceen
   Widget build(BuildContext context) {
     // TODO: implement build
     //things
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        foregroundColor: Colors.white,
+        //top banner colors
+        backgroundColor: Color.fromARGB(255, 213, 107, 19),
+        foregroundColor: Colors.black,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // create buttons that would navigate to each page (build or Join)
-            SizedBox(
+            //change to containers
+            Container(
               width: 300, // <-- Your width
               height: 100,
               child: ElevatedButton(
                 key: const Key('BButton'),
                 onPressed: _openBuild,
                 style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30)),
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      ),
+                      elevation: 25,
+                      shadowColor: Color.fromARGB(255, 118, 118, 118)
+                      ),
                 child: const Text('Build a Workout'),
-              ),
-            ),
-            const SizedBox(
+              ),),
+            Container(
               width: 300,
-              height: 50,
-              child: Text('Welcome to Movement Pro'),
-            ),
-            SizedBox(
+              height: 100,
+            ),  
+            Container(
               width: 300, // <-- Your width
               height: 100,
               child: ElevatedButton(
                 key: const Key('JButton'),
                 onPressed: _openJoin,
                 style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(fontSize: 30)),
-                child: const Text('Join a Workout'),
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      ),
+                      elevation: 25,
+                      shadowColor: Color.fromARGB(255, 118, 118, 118)
+                      ),
+                child: const Text('Join a Workout'),),
               ),
-            ),
           ],
         ),
       ),
@@ -202,9 +214,19 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.green);
+      textStyle: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,),
+          elevation: 25,
+          shadowColor: Color.fromARGB(255, 118, 118, 118),
+          backgroundColor: Colors.green);
+      
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.red);
+      textStyle: const TextStyle(fontSize: 20,
+        fontWeight: FontWeight.bold),
+          elevation: 25,
+          shadowColor: Color.fromARGB(255, 118, 118, 118),
+          backgroundColor: Colors.red);
 
   //Get IP Address of device
   Future<void> _findIPAddress() async {
@@ -402,9 +424,9 @@ class _ToDoListState extends State<ToDoList> {
   final Key key2 = const Key("Sets");
   final Key key3 = const Key("Reps");
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Colors.orange);
+      textStyle: const TextStyle(fontSize: 20), primary: Color.fromARGB(255, 213, 107, 19));
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Colors.red);
+      textStyle: const TextStyle(fontSize: 20), primary: Color.fromARGB(255, 213, 107, 19));
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
     print("Loading Dialog");
@@ -539,7 +561,7 @@ class _ToDoListState extends State<ToDoList> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Workout Creator'),
-          backgroundColor: Colors.orange,
+          backgroundColor: Color.fromARGB(255, 213, 107, 19),
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
