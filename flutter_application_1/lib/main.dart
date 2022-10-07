@@ -214,9 +214,19 @@ class _JoinPageState extends State<JoinPage> {
   }
 
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.green);
+      textStyle: const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.bold,),
+          elevation: 25,
+          shadowColor: Color.fromARGB(255, 118, 118, 118),
+          backgroundColor: Colors.green);
+      
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), backgroundColor: Colors.red);
+      textStyle: const TextStyle(fontSize: 20,
+        fontWeight: FontWeight.bold),
+          elevation: 25,
+          shadowColor: Color.fromARGB(255, 118, 118, 118),
+          backgroundColor: Colors.red);
 
   //Get IP Address of device
   Future<void> _findIPAddress() async {
