@@ -21,10 +21,29 @@ class ToDoListItem extends StatelessWidget {
     required this.onDeleteItem,
   }) : super(key: ObjectKey(workout));
 
-  final Workout workout;
+  Workout workout;
   final bool completed;
   final ToDoListChangedCallback onListChanged;
   final ToDoListRemovedCallback onDeleteItem;
+
+  //really not sure about this
+  //These two functions should make it interactable when sent
+  Map<String, dynamic> toJson() => {
+        'workout': workout,
+        'completed': completed,
+        'changed': onListChanged,
+        'deleted': onDeleteItem,
+        //'title': _title,
+        //'workout': _workout,
+      };
+
+  ToDoListItem.fromJson(Map<String, dynamic> json)
+      : workout = json['workout'],
+        completed = json['completed'],
+        onListChanged = json['onListChanged'],
+        onDeleteItem = json['onDeleteItem'];
+  //_title = json['title'],
+  //_workout = json['workout'];
 
   Color _getColor(BuildContext context) {
     // The theme depends on the BuildContext because different
@@ -93,7 +112,7 @@ class ToDoListItem extends StatelessWidget {
 }
 
 class Workout {
-  const Workout({required this.name, required this.reps, required this.sets});
+  Workout({required this.name, required this.reps, required this.sets});
   final String name;
   final String sets;
   final String reps;
@@ -101,4 +120,21 @@ class Workout {
   String abbrev() {
     return name.substring(0, 1);
   }
+
+  /*
+  String get this.name => _name;
+  String get title => _title;
+  Workout get workout => _workout;
+
+  Map<String, dynamic> toJson() => {
+        'name': _name,
+        'title': _title,
+        'workout': _workout,
+      };
+
+  User.fromJson(Map<String, dynamic> json)
+      : _name = json['name'],
+        _title = json['title'],
+        _workout = json['workout'];
+  */
 }
