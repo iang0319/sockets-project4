@@ -13,6 +13,9 @@ import 'package:network_info_plus/network_info_plus.dart';
 
 import 'connections_list.dart';
 
+//doesn't run on iphone idk why, something to do with port access
+//message decoding is weird bc receive wants incoming to be a string and not a json type
+
 void main() {
   runApp(
     MaterialApp(
@@ -22,7 +25,7 @@ void main() {
             JoinPage(title: 'Join Page'), //Join Page
         '/build': (BuildContext context) => ToDoList(), //Build Page
         '/home': (BuildContext context) =>
-            HomePage(title: 'Leveler'), //Home Page
+            HomePage(title: 'Movement Pro'), //Home Page
       },
     ),
   );
