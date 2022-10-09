@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/workout_items.dart';
 
 import 'package:mutex/mutex.dart';
 
@@ -45,7 +46,7 @@ class Friend extends ChangeNotifier {
 
   Friend({required this.ipAddr, required this.name});
 
-  Future<void> send(String message) async {
+  Future<void> send(Message message) async {
     Socket socket = await Socket.connect(ipAddr, ourPort);
     socket.write(message);
     socket.close();
@@ -56,7 +57,8 @@ class Friend extends ChangeNotifier {
     return _add_message(name, message);
   }
 
-  Future<void> _add_message(String name, String message) async {
+  //message was originally a String, now contains a Workout
+  Future<void> _add_message(String name, message) async {
     await m.protect(() async {
       _messages.add(Message(author: name, content: message));
       notifyListeners();
@@ -69,10 +71,11 @@ class Friend extends ChangeNotifier {
 }
 
 class Message {
-  final String content;
+  late Map<String, dynamic> content;
   final String author;
 
-  const Message({required this.author, required this.content});
+  //const Message({required this.author, required this.content});
+  Message({required this.author, required this.content});
 
   String get transcript => '$author: $content';
 }

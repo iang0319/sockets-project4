@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/connection.dart';
+import 'package:flutter_application_1/workout_items.dart';
 
 typedef FriendListChatCallback = Function(Friend item);
 typedef FriendListEditCallback = Function(Friend item);
@@ -21,6 +22,8 @@ class FriendListItem extends StatelessWidget {
         child: ListTile(
       onTap: () {
         //onListTapped(friend);
+        //trying to get on tap to pull up messages/workouts received from said friend
+        friend.receive(Workout.fromJson.toString());
       },
       onLongPress: () {
         // onListEdited(friend);
