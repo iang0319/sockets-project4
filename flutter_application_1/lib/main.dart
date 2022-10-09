@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/workout_items.dart';
@@ -568,7 +569,18 @@ class _ToDoListState extends State<ToDoList> {
     });
   }
 
-  void _increment() {}
+  // no idea what return type this is
+  _sendW(List<Workout> workouts, String loc) {
+    //takes in workout list then loops through each movement
+    //converts each to json then sends message
+
+    Friend f = Friend(ipAddr: loc, name: 'self');
+    for (int i = 0; i < workouts.length; i++) {
+      Map<String, dynamic> x = workouts[i].toJson();
+      Message message = Message(author: valueText, content: x);
+      f.send(message);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -592,7 +604,9 @@ class _ToDoListState extends State<ToDoList> {
             padding: EdgeInsets.all(10),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               ElevatedButton(
-                  onPressed: _increment,
+                  //i see this producing a bug
+                  //recipient is hard coded as ourself rn
+                  onPressed: _sendW(workouts, '$ourPort'),
                   child: const Text(
                     "Send Workout",
                     textAlign: TextAlign.center,
