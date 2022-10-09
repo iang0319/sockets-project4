@@ -6,8 +6,10 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/workout_items.dart';
 import 'package:flutter_test/flutter_test.dart';
-
+import 'dart:convert';
+import 'package:flutter_application_1/serializer.dart';
 import 'package:flutter_application_1/main.dart';
 
 void main() {
@@ -53,4 +55,21 @@ void main() {
     expect(find.byKey(const Key("Password")), findsOneWidget);
     expect(find.byKey(const Key("View Connections")), findsOneWidget);
   });
+
+  /*
+  this text is for testing if sending messages 
+
+  test('convert', () {
+    
+    UserStampedMessage msg = UserStampedMessage("This is a test", User("Gabriel Ferrer", "Professor", ));
+    Map<String,dynamic> msgJson = msg.toJson();
+    String msgStr = jsonEncode(msgJson);
+    // Send it over a network, receive it, rebuild it.
+    Map<String,dynamic> decodedMap = jsonDecode(msgStr);
+    expect(msgJson, decodedMap);
+    UserStampedMessage recovered = UserStampedMessage.fromJson(decodedMap);
+    expect(recovered, msg);
+  });
+
+  */
 }
