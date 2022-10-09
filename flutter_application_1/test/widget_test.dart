@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/workout_items.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:convert';
-import 'package:flutter_application_1/serializer.dart';
 import 'package:flutter_application_1/main.dart';
 
 void main() {

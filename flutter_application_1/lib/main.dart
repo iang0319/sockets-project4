@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js_util';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -363,7 +364,8 @@ class _JoinPageState extends State<JoinPage> {
               children: _friends.map((name) {
                 return FriendListItem(
                   friend: _friends.getFriend(name)!,
-                  //onListTapped: _handleChat,
+                  //here is where we would access messages/workouts i think
+                  //onListTapped:
                   //onListEdited: _handleEditFriend,
                 );
               }).toList());
@@ -574,7 +576,7 @@ class _ToDoListState extends State<ToDoList> {
     //takes in workout list then loops through each movement
     //converts each to json then sends message
 
-    Friend f = Friend(ipAddr: loc, name: 'self');
+    Friend f = Friend(ipAddr: loc, name: 'name');
     for (int i = 0; i < workouts.length; i++) {
       Map<String, dynamic> x = workouts[i].toJson();
       Message message = Message(author: valueText, content: x);
@@ -605,8 +607,10 @@ class _ToDoListState extends State<ToDoList> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               ElevatedButton(
                   //i see this producing a bug
-                  //recipient is hard coded as ourself rn
-                  onPressed: _sendW(workouts, '$ourPort'),
+                  //recipient is hard coded as hop's iphone rn
+                  onPressed: () {
+                    _sendW(workouts, '192.168.2.214');
+                  },
                   child: const Text(
                     "Send Workout",
                     textAlign: TextAlign.center,
