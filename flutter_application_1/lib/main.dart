@@ -104,7 +104,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset('assets/images/MP.pnc.jpeg',
+            Image.asset(
+              'assets/images/MP.pnc.jpeg',
               width: 500,
               height: 300,
             ),
@@ -122,16 +123,16 @@ class _HomePageState extends State<HomePage> {
                     textStyle: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      ),
-                      elevation: 25,
-                      shadowColor: Color.fromARGB(255, 118, 118, 118)
-                      ),
+                    ),
+                    elevation: 25,
+                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
                 child: const Text('Build a Workout'),
-              ),),
+              ),
+            ),
             Container(
               width: 300,
               height: 100,
-            ),  
+            ),
             Container(
               width: 300, // <-- Your width
               height: 100,
@@ -142,12 +143,12 @@ class _HomePageState extends State<HomePage> {
                     textStyle: const TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
-                      ),
-                      elevation: 25,
-                      shadowColor: Color.fromARGB(255, 118, 118, 118)
-                      ),
-                child: const Text('Join a Workout'),),
+                    ),
+                    elevation: 25,
+                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
+                child: const Text('Join a Workout'),
               ),
+            ),
           ],
         ),
       ),
@@ -223,17 +224,17 @@ class _JoinPageState extends State<JoinPage> {
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
       textStyle: const TextStyle(
         fontSize: 20,
-        fontWeight: FontWeight.bold,),
-          elevation: 25,
-          shadowColor: Color.fromARGB(255, 118, 118, 118),
-          backgroundColor: Colors.green);
-      
+        fontWeight: FontWeight.bold,
+      ),
+      elevation: 25,
+      shadowColor: Color.fromARGB(255, 118, 118, 118),
+      backgroundColor: Colors.green);
+
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20,
-        fontWeight: FontWeight.bold),
-          elevation: 25,
-          shadowColor: Color.fromARGB(255, 118, 118, 118),
-          backgroundColor: Colors.red);
+      textStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      elevation: 25,
+      shadowColor: Color.fromARGB(255, 118, 118, 118),
+      backgroundColor: Colors.red);
 
   //Get IP Address of device
   Future<void> _findIPAddress() async {
@@ -431,9 +432,11 @@ class _ToDoListState extends State<ToDoList> {
   final Key key2 = const Key("Sets");
   final Key key3 = const Key("Reps");
   final ButtonStyle yesStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Color.fromARGB(255, 213, 107, 19));
+      textStyle: const TextStyle(fontSize: 20),
+      primary: Color.fromARGB(255, 213, 107, 19));
   final ButtonStyle noStyle = ElevatedButton.styleFrom(
-      textStyle: const TextStyle(fontSize: 20), primary: Color.fromARGB(255, 213, 107, 19));
+      textStyle: const TextStyle(fontSize: 20),
+      primary: Color.fromARGB(255, 213, 107, 19));
 
   Future<void> _displayTextInputDialog(BuildContext context) async {
     print("Loading Dialog");
@@ -522,7 +525,7 @@ class _ToDoListState extends State<ToDoList> {
   String reps = "";
 
   static final List<Workout> workouts = [
-    const Workout(name: "Example", reps: "5", sets: "3")
+    Workout(name: "Example", reps: "5", sets: "3")
   ];
 
   static final _workoutSet = <Workout>{};
