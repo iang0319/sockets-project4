@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 //import 'dart:html';
 //import 'dart:js_util';
 import 'dart:typed_data';
@@ -16,7 +17,7 @@ import 'connections_list.dart';
 
 //doesn't run on iphone idk why, something to do with port access
 //message decoding is weird bc receive wants incoming to be a string and not a json type
-
+//Message message = Message(author: 'author', content: Workout.toJson());
 void main() {
   runApp(
     MaterialApp(
@@ -26,7 +27,7 @@ void main() {
             JoinPage(title: 'Join Page'), //Join Page
         '/build': (BuildContext context) => ToDoList(), //Build Page
         '/home': (BuildContext context) =>
-            HomePage(title: 'Movement Pro'), //Home Page
+            const HomePage(title: 'Movement Pro'), //Home Page
       },
     ),
   );
@@ -55,7 +56,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomePage(title: 'Movement Pro'),
+      home: HomePage(title: 'Movement Pro'),
     );
   }
 }
@@ -71,9 +72,63 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String? _ipaddress = "Loading...";
+  bool _isObscure = true;
+  late StreamSubscription<Socket> server_sub;
+  static late Friends _friends = Friends();
+  static late List<DropdownMenuItem<String>> _friendList;
+  late TextEditingController _nameController,
+      _ipController,
+      _passwordController;
+
   @override
   void initState() {
     super.initState();
+    _nameController = TextEditingController();
+    _ipController = TextEditingController();
+    _passwordController = TextEditingController();
+    _setupServer();
+    _findIPAddress();
+  }
+
+  void dispose() {
+    server_sub.cancel();
+    super.dispose();
+  }
+
+  Future<void> _setupServer() async {
+    try {
+      ServerSocket server =
+          await ServerSocket.bind(InternetAddress.anyIPv4, ourPort);
+      server_sub = server.listen(_listenToSocket); // StreamSubscription<Socket>
+    } on SocketException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Error: $e"),
+      ));
+    }
+  }
+
+  void _listenToSocket(Socket socket) {
+    socket.listen((data) {
+      setState(() {
+        _handleIncomingMessage(socket.remoteAddress.address, data);
+      });
+    });
+  }
+
+  void _handleIncomingMessage(String ip, Uint8List incomingData) {
+    String received = String.fromCharCodes(incomingData);
+    print("Received '$received' from '$ip'");
+    _friends.receiveFrom(ip, received);
+  }
+
+  //Get IP Address of device
+  Future<void> _findIPAddress() async {
+    // Thank you https://stackoverflow.com/questions/52411168/how-to-get-device-ip-in-dart-flutter
+    String? ip = await NetworkInfo().getWifiIP();
+    setState(() {
+      _ipaddress = "My IP: " + ip!;
+    });
   }
 
   // onPressed move to these states/pages
@@ -375,6 +430,8 @@ class _JoinPageState extends State<JoinPage> {
                   friend: _friends.getFriend(name)!,
                   //here is where we would access messages/workouts i think
                   //onListTapped:
+
+                  //_friends.getFriend(name).receive(message)
                   //onListEdited: _handleEditFriend,
                 );
               }).toList());
@@ -624,14 +681,14 @@ class _ToDoListState extends State<ToDoList> {
   // no idea what return type this is
   _sendW(List<Workout> workouts, String loc) {
     //takes in workout list then loops through each movement
-    //converts each to json then sends message
-    Friend self = Friend(ipAddr: '172.17.7.159', name: 'self');
-    Friend f = Friend(ipAddr: loc, name: 'name');
+    //converts each movement to json then sends message
+    Friend self = Friend(ipAddr: '172.17.5.74', name: 'self');
+    Friend f = Friend(ipAddr: loc, name: 'Ian');
     for (int i = 0; i < workouts.length; i++) {
-      Map<String, dynamic> x = workouts[i].toJson();
-      Message message = Message(author: valueText, content: x);
-      self.send(message);
-      f.receive(message);
+      String x = jsonEncode(workouts[i].toJson());
+      //Message message = Message(author: valueText, content: x);
+      self.send(x);
+      //f.receive(message);
     }
   }
 
@@ -659,9 +716,9 @@ class _ToDoListState extends State<ToDoList> {
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               ElevatedButton(
                   //i see this producing a bug
-                  //recipient is hard coded as hop's iphone rn
+                  //recipient is hard coded as Ian's tablet iphone rn
                   onPressed: () {
-                    _sendW(workouts, '192.168.2.214');
+                    _sendW(workouts, '10.253.195.79');
                   },
                   child: const Text(
                     "Send Workout",

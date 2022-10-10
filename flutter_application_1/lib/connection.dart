@@ -9,6 +9,8 @@ import 'package:flutter_application_1/workout_items.dart';
 import 'package:mutex/mutex.dart';
 
 const int ourPort = 8888;
+//const int ourPort = 35119 got an error with this port on student
+//const int ourPort = 35123; //got an error with this port on IOT - keeps chaning port that error originates from
 final m = Mutex();
 
 class Friends extends Iterable<String> {
@@ -34,10 +36,8 @@ class Friends extends Iterable<String> {
       print("added $newFriend!");
     }
 
-    _ips2Friends[ip]!.receive(Message(
-        author: mess,
-        content: Workout(name: mess, reps: '0', sets: '0').toJson()));
-    //_ips2Friends[ip]!.receive(message);
+    //_ips2Friends[ip]!.receive(Message(author: mess,content: Workout(name: mess, reps: '0', sets: '0').toJson()));
+    _ips2Friends[ip]!.receive(mess);
   }
 
   @override
@@ -47,23 +47,25 @@ class Friends extends Iterable<String> {
 class Friend extends ChangeNotifier {
   final String ipAddr;
   final String name;
-  final List<Message> _messages = [];
+  final List<Workout> _messages = [];
 
   Friend({required this.ipAddr, required this.name});
 
-  Future<void> send(Message message) async {
+  Future<void> send(String message) async {
     Socket socket = await Socket.connect(ipAddr, ourPort);
     socket.write(message);
     socket.close();
-    await _add_message("Me", message);
+    //await _add_message("Me", message);
   }
 
-  Future<void> receive(Message message) async {
-    return _add_message(name, message);
+  Future<void> receive(String message) async {
+    Map<String, dynamic> workout = jsonDecode(message);
+    Workout recovered = Workout.fromJson(workout);
+    return _add_message(name, recovered);
   }
 
   //message was originally a String, now contains a Workout = Message
-  Future<void> _add_message(String name, Message message) async {
+  Future<void> _add_message(String name, Workout message) async {
     await m.protect(() async {
       _messages.add(message);
       //_messages.add(Message(author: name, content: message));
@@ -72,13 +74,16 @@ class Friend extends ChangeNotifier {
     });
   }
 
+  /*
   String history() => _messages
       .map((m) => m.transcript)
       .fold("", (message, line) => message + '\n' + line);
+  */
 }
 
 class Message {
-  late Map<String, dynamic> content;
+  //late Map<String, dynamic> content;
+  String content;
   final String author;
 
   //const Message({required this.author, required this.content});
