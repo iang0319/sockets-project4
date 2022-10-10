@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:js_util';
+//import 'dart:js_util';
 import 'dart:typed_data';
 import 'dart:ui';
 
@@ -374,6 +374,7 @@ class _JoinPageState extends State<JoinPage> {
               }).toList());
         });
   }
+
   //Join workout screen
   @override
   Widget build(BuildContext context) {
@@ -392,72 +393,70 @@ class _JoinPageState extends State<JoinPage> {
               width: 300,
               height: 100,
               child: ElevatedButton(
-                key: const Key("Connection"),
-                onPressed: () async {
-                  await _displayTextInputDialog(context);
-                },
-                style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    elevation: 25,
-                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
-                    child: const Text("Make connection")),
+                  key: const Key("Connection"),
+                  onPressed: () async {
+                    await _displayTextInputDialog(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      elevation: 25,
+                      shadowColor: Color.fromARGB(255, 118, 118, 118)),
+                  child: const Text("Make connection")),
             ),
             Container(
               width: 300,
               height: 100,
             ),
             Container(
-              width: 300,
-              height: 100,
-              child: ElevatedButton(
-              key: const Key("Password"),
-              onPressed: () async {
-                await _enterPassword(context);
-              },
-              style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    elevation: 25,
-                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
-                    child: const Text('Enter Password'),
-              )
-            ),
+                width: 300,
+                height: 100,
+                child: ElevatedButton(
+                  key: const Key("Password"),
+                  onPressed: () async {
+                    await _enterPassword(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      textStyle: const TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      elevation: 25,
+                      shadowColor: Color.fromARGB(255, 118, 118, 118)),
+                  child: const Text('Enter Password'),
+                )),
             Container(
               width: 300,
               height: 100,
             ),
             Container(
-              width: 300,
-              height: 100,
-              child: ElevatedButton(
-                key: const Key("View Connections"),
-                onPressed: () async {
-                  await _viewConnections();
-                },
-                style: ElevatedButton.styleFrom(
-                    textStyle: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    elevation: 25,
-                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
-                child: const Text("View Connections"))
-            )
+                width: 300,
+                height: 100,
+                child: ElevatedButton(
+                    key: const Key("View Connections"),
+                    onPressed: () async {
+                      await _viewConnections();
+                    },
+                    style: ElevatedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        elevation: 25,
+                        shadowColor: Color.fromARGB(255, 118, 118, 118)),
+                    child: const Text("View Connections")))
           ],
         ),
       ),
       bottomNavigationBar: Padding(
           padding: EdgeInsets.all(10),
           child: Container(
-                  width: double.infinity,
-                  child: Text(
-                    _ipaddress!,
-                    textAlign: TextAlign.center,
+              width: double.infinity,
+              child: Text(
+                _ipaddress!,
+                textAlign: TextAlign.center,
               ))),
     );
   }
