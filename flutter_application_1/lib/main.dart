@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 //import 'dart:js_util';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -227,7 +228,7 @@ class _JoinPageState extends State<JoinPage> {
 
   void addNew() {
     setState(() {
-      _friends.add(_nameController.text, _ipController.text);
+      _friends.addFriend(_nameController.text, _ipController.text);
     });
   }
 
@@ -624,12 +625,13 @@ class _ToDoListState extends State<ToDoList> {
   _sendW(List<Workout> workouts, String loc) {
     //takes in workout list then loops through each movement
     //converts each to json then sends message
-
+    Friend self = Friend(ipAddr: '172.17.7.159', name: 'self');
     Friend f = Friend(ipAddr: loc, name: 'name');
     for (int i = 0; i < workouts.length; i++) {
       Map<String, dynamic> x = workouts[i].toJson();
       Message message = Message(author: valueText, content: x);
-      f.send(message);
+      self.send(message);
+      f.receive(message);
     }
   }
 
