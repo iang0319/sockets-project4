@@ -177,8 +177,8 @@ class _JoinPageState extends State<JoinPage> {
   String? _ipaddress = "Loading...";
   bool _isObscure = true;
   late StreamSubscription<Socket> server_sub;
-  late Friends _friends;
-  late List<DropdownMenuItem<String>> _friendList;
+  static late Friends _friends = Friends();
+  static late List<DropdownMenuItem<String>> _friendList;
   late TextEditingController _nameController,
       _ipController,
       _passwordController;
@@ -186,12 +186,17 @@ class _JoinPageState extends State<JoinPage> {
   @override
   void initState() {
     super.initState();
-    _friends = Friends();
+    //_friends = Friends();
     _nameController = TextEditingController();
     _ipController = TextEditingController();
     _passwordController = TextEditingController();
     _setupServer();
     _findIPAddress();
+  }
+
+  void dispose() {
+    server_sub.cancel();
+    super.dispose();
   }
 
   Future<void> _setupServer() async {
