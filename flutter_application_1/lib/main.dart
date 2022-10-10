@@ -374,48 +374,90 @@ class _JoinPageState extends State<JoinPage> {
               }).toList());
         });
   }
-
+  //Join workout screen
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 213, 107, 19),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(
+            Container(
+              width: 300,
+              height: 100,
+              child: ElevatedButton(
                 key: const Key("Connection"),
                 onPressed: () async {
                   await _displayTextInputDialog(context);
                 },
-                child: const Text("Make connection")),
-            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    elevation: 25,
+                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
+                    child: const Text("Make connection")),
+            ),
+            Container(
+              width: 300,
+              height: 100,
+            ),
+            Container(
+              width: 300,
+              height: 100,
+              child: ElevatedButton(
               key: const Key("Password"),
-              child: const Text('Enter Password'),
               onPressed: () async {
                 await _enterPassword(context);
               },
+              style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    elevation: 25,
+                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
+                    child: const Text('Enter Password'),
+              )
             ),
-            ElevatedButton(
+            Container(
+              width: 300,
+              height: 100,
+            ),
+            Container(
+              width: 300,
+              height: 100,
+              child: ElevatedButton(
                 key: const Key("View Connections"),
                 onPressed: () async {
                   await _viewConnections();
                 },
+                style: ElevatedButton.styleFrom(
+                    textStyle: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    elevation: 25,
+                    shadowColor: Color.fromARGB(255, 118, 118, 118)),
                 child: const Text("View Connections"))
+            )
           ],
         ),
       ),
       bottomNavigationBar: Padding(
           padding: EdgeInsets.all(10),
           child: Container(
-              width: double.infinity,
-              child: Text(
-                _ipaddress!,
-                textAlign: TextAlign.center,
+                  width: double.infinity,
+                  child: Text(
+                    _ipaddress!,
+                    textAlign: TextAlign.center,
               ))),
     );
   }
@@ -593,6 +635,7 @@ class _ToDoListState extends State<ToDoList> {
         appBar: AppBar(
           title: const Text('Workout Creator'),
           backgroundColor: Color.fromARGB(255, 213, 107, 19),
+          foregroundColor: Colors.black,
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
