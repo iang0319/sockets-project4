@@ -1,5 +1,6 @@
 //Got this class from the text_messenger demo
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class Friends extends Iterable<String> {
   Map<String, Friend> _names2Friends = {};
   Map<String, Friend> _ips2Friends = {};
 
-  void add(String name, String ip) {
+  void addFriend(String name, String ip) {
     Friend f = Friend(ipAddr: ip, name: name);
     _names2Friends[name] = f;
     _ips2Friends[ip] = f;
@@ -24,15 +25,19 @@ class Friends extends Iterable<String> {
 
   Friend? getFriend(String? name) => _names2Friends[name];
 
-  void receiveFrom(String ip, String message) {
-    print("receiveFrom($ip, $message)");
+  void receiveFrom(String ip, String mess) {
+    print("receiveFrom($ip, $mess)");
     if (!_ips2Friends.containsKey(ip)) {
       String newFriend = "Friend${_ips2Friends.length}";
       print("Adding new friend");
-      add(newFriend, ip);
+      addFriend(newFriend, ip);
       print("added $newFriend!");
     }
-    _ips2Friends[ip]!.receive(message);
+
+    _ips2Friends[ip]!.receive(Message(
+        author: mess,
+        content: Workout(name: mess, reps: '0', sets: '0').toJson()));
+    //_ips2Friends[ip]!.receive(message);
   }
 
   @override
@@ -53,14 +58,16 @@ class Friend extends ChangeNotifier {
     await _add_message("Me", message);
   }
 
-  Future<void> receive(String message) async {
+  Future<void> receive(Message message) async {
     return _add_message(name, message);
   }
 
-  //message was originally a String, now contains a Workout
-  Future<void> _add_message(String name, message) async {
+  //message was originally a String, now contains a Workout = Message
+  Future<void> _add_message(String name, Message message) async {
     await m.protect(() async {
-      _messages.add(Message(author: name, content: message));
+      _messages.add(message);
+      //_messages.add(Message(author: name, content: message));
+
       notifyListeners();
     });
   }

@@ -23,7 +23,7 @@ class FriendListItem extends StatelessWidget {
       onTap: () {
         //onListTapped(friend);
         //trying to get on tap to pull up messages/workouts received from said friend
-        friend.receive(Workout.fromJson.toString());
+        //friend.receive(Message(author: friend.name, content: ));
       },
       onLongPress: () {
         // onListEdited(friend);
