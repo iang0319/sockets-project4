@@ -333,7 +333,7 @@ class _JoinPageState extends State<JoinPage> {
                 TextEntry(
                     width: 200,
                     label: "IP Address",
-                    inType: TextInputType.number,
+                    inType: TextInputType.text,
                     controller: _ipController),
               ],
             ),
