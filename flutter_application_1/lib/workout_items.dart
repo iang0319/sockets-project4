@@ -117,6 +117,6 @@ class Workout {
 
   Workout.fromJson(Map<String, dynamic> json)
       : name = json['name'],
-        sets = json['title'],
-        reps = json['workout'];
+        sets = json['sets'],
+        reps = json['reps'];
 }

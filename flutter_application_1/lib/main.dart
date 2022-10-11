@@ -232,7 +232,7 @@ class JoinPage extends StatefulWidget {
 class _JoinPageState extends State<JoinPage> {
   String? _ipaddress = "Loading...";
   bool _isObscure = true;
-  late StreamSubscription<Socket> server_sub;
+  //late StreamSubscription<Socket> server_sub;
   static late Friends _friends = Friends();
   static late List<DropdownMenuItem<String>> _friendList;
   late TextEditingController _nameController,
@@ -246,15 +246,15 @@ class _JoinPageState extends State<JoinPage> {
     _nameController = TextEditingController();
     _ipController = TextEditingController();
     _passwordController = TextEditingController();
-    _setupServer();
+    //_setupServer();
     _findIPAddress();
   }
 
-  void dispose() {
-    server_sub.cancel();
-    super.dispose();
-  }
-
+  //void dispose() {
+  //server_sub.cancel();
+  //  super.dispose();
+  // }
+  /*
   Future<void> _setupServer() async {
     try {
       ServerSocket server =
@@ -266,6 +266,7 @@ class _JoinPageState extends State<JoinPage> {
       ));
     }
   }
+  */
 
   void _listenToSocket(Socket socket) {
     socket.listen((data) {
@@ -718,7 +719,7 @@ class _ToDoListState extends State<ToDoList> {
                   //i see this producing a bug
                   //recipient is hard coded as Ian's tablet iphone rn
                   onPressed: () {
-                    _sendW(workouts, '10.253.195.79');
+                    _sendW(workouts, '172.17.5.74');
                   },
                   child: const Text(
                     "Send Workout",
