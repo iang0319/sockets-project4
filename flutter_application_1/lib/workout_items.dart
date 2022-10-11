@@ -106,6 +106,11 @@ class Workout {
     return name.substring(0, 1);
   }
 
+  @override
+  String toString() {
+    return '{Exercise: ${name}, sets: ${sets}, reps: ${reps}}';
+  }
+
   //got this from the test messenger example app
 // found here: https://github.com/ethan-thomas0223/text_messenger/blob/master/lib/serializer.dart
 

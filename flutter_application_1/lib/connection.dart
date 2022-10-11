@@ -47,7 +47,7 @@ class Friends extends Iterable<String> {
 class Friend extends ChangeNotifier {
   final String ipAddr;
   final String name;
-  final List<Workout> _messages = [];
+  static final List<Workout> _messages = [];
 
   Friend({required this.ipAddr, required this.name});
 
@@ -72,6 +72,15 @@ class Friend extends ChangeNotifier {
 
       notifyListeners();
     });
+  }
+
+  getMessages() {
+    //print(_messages.first.toJson());
+    List<String> workoutList = [];
+    for (int i = 0; i < _messages.length; i++) {
+      workoutList.add(_messages[i].toString());
+    }
+    return workoutList.toList();
   }
 
   /*

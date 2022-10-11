@@ -16,6 +16,32 @@ class FriendListItem extends StatelessWidget {
   //final FriendListChatCallback onListTapped;
   //final FriendListEditCallback onListEdited;
 
+  Future<void> testConnection(BuildContext context) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Exercise Info'),
+            content: SizedBox(
+              width: 100,
+              height: 80,
+              child: Column(children: [
+                Text("Workout for the day: ${friend.getMessages()}"),
+              ]),
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                key: const Key("Leave"),
+                child: const Text('Leave'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,6 +50,7 @@ class FriendListItem extends StatelessWidget {
         //onListTapped(friend);
         //trying to get on tap to pull up messages/workouts received from said friend
         //friend.receive(Message(author: friend.name, content: ));
+        testConnection(context);
       },
       onLongPress: () {
         // onListEdited(friend);
