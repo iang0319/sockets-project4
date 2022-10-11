@@ -427,13 +427,15 @@ class _JoinPageState extends State<JoinPage> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               children: _friends.map((name) {
                 return FriendListItem(
-                  friend: _friends.getFriend(name)!,
-                  //here is where we would access messages/workouts i think
-                  //onListTapped:
+                    friend: _friends.getFriend(name)!,
 
-                  //_friends.getFriend(name).receive(message)
-                  //onListEdited: _handleEditFriend,
-                );
+                    //here is where we would access messages/workouts i think
+                    content: _friends.getFriend(name)!.getMessage()
+                    //onListTapped:
+
+                    //_friends.getFriend(name).receive(message)
+                    //onListEdited: _handleEditFriend,
+                    );
               }).toList());
         });
   }
