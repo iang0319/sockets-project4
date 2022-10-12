@@ -540,6 +540,7 @@ class _ToDoListState extends State<ToDoList> {
   final TextEditingController _inputController = TextEditingController();
   final TextEditingController _setsController = TextEditingController();
   final TextEditingController _repsController = TextEditingController();
+  final TextEditingController _ipSender = TextEditingController();
   final Key key1 = const Key("Exercise");
   final Key key2 = const Key("Sets");
   final Key key3 = const Key("Reps");
@@ -636,6 +637,8 @@ class _ToDoListState extends State<ToDoList> {
 
   String reps = "";
 
+  String ip = "";
+
   static final List<Workout> workouts = [
     Workout(name: "Example", reps: "5", sets: "3")
   ];
@@ -680,6 +683,60 @@ class _ToDoListState extends State<ToDoList> {
     });
   }
 
+  Future<void> _sendIP(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text("Enter IP you want to send workout to"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                  controller: _ipSender,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter Ip here',
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      ip = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              ElevatedButton(
+                key: const Key("CancelButton"),
+                style: noStyle,
+                child: const Text('Cancel'),
+                onPressed: () {
+                  setState(() {
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+              ElevatedButton(
+                key: const Key("OKButton"),
+                style: yesStyle,
+                child: const Text('OK'),
+                onPressed: () {
+                  setState(() {
+                    _sendW(workouts, ip);
+                    Navigator.pop(context);
+                  });
+                },
+              ),
+            ],
+          );
+        });
+  }
+
+  String getIp(BuildContext context) {
+    return ip;
+  }
+
   // no idea what return type this is
   _sendW(List<Workout> workouts, String loc) {
     //takes in workout list then loops through each movement
@@ -720,7 +777,8 @@ class _ToDoListState extends State<ToDoList> {
                   //i see this producing a bug
                   //recipient is hard coded as Ian's tablet iphone rn
                   onPressed: () {
-                    _sendW(workouts, '172.17.5.74');
+                    _sendIP(context);
+                    //_sendW(workouts, ip);
                   },
                   child: const Text(
                     "Send Workout",
