@@ -15,9 +15,6 @@ import 'package:network_info_plus/network_info_plus.dart';
 
 import 'connections_list.dart';
 
-//doesn't run on iphone idk why, something to do with port access
-//message decoding is weird bc receive wants incoming to be a string and not a json type
-//Message message = Message(author: 'author', content: Workout.toJson());
 void main() {
   runApp(
     MaterialApp(
@@ -32,8 +29,6 @@ void main() {
     ),
   );
 }
-
-//Test comment
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -639,6 +634,15 @@ class _ToDoListState extends State<ToDoList> {
 
   String ip = "";
 
+  String _ipaddress = '';
+  Future<void> _findIPAddress() async {
+    // Thank you https://stackoverflow.com/questions/52411168/how-to-get-device-ip-in-dart-flutter
+    String? ip = await NetworkInfo().getWifiIP();
+    setState(() {
+      _ipaddress = "My IP: " + ip!;
+    });
+  }
+
   static final List<Workout> workouts = [
     Workout(name: "Example", reps: "5", sets: "3")
   ];
@@ -741,7 +745,9 @@ class _ToDoListState extends State<ToDoList> {
   _sendW(List<Workout> workouts, String loc) {
     //takes in workout list then loops through each movement
     //converts each movement to json then sends message
-    Friend self = Friend(ipAddr: '172.17.5.74', name: 'self');
+    //172.17.5.74
+    _findIPAddress();
+    Friend self = Friend(ipAddr: _ipaddress, name: 'self');
     Friend f = Friend(ipAddr: loc, name: 'Ian');
     for (int i = 0; i < workouts.length; i++) {
       String x = jsonEncode(workouts[i].toJson());
