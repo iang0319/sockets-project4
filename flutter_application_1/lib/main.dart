@@ -634,15 +634,6 @@ class _ToDoListState extends State<ToDoList> {
 
   String ip = "";
 
-  String _ipaddress = '';
-  Future<void> _findIPAddress() async {
-    // Thank you https://stackoverflow.com/questions/52411168/how-to-get-device-ip-in-dart-flutter
-    String? ip = await NetworkInfo().getWifiIP();
-    setState(() {
-      _ipaddress = ip!;
-    });
-  }
-
   static final List<Workout> workouts = [
     Workout(name: "Example", reps: "5", sets: "3")
   ];
@@ -745,15 +736,12 @@ class _ToDoListState extends State<ToDoList> {
   _sendW(List<Workout> workouts, String loc) {
     //takes in workout list then loops through each movement
     //converts each movement to json then sends message
-    //172.17.5.74
-    _findIPAddress();
-    Friend self = Friend(ipAddr: _ipaddress, name: 'self');
+    //Whatever this Ip is, this is the only device that can receive information
+    Friend self = Friend(ipAddr: '172.17.5.74', name: 'self');
     Friend f = Friend(ipAddr: loc, name: 'Ian');
     for (int i = 0; i < workouts.length; i++) {
       String x = jsonEncode(workouts[i].toJson());
-      //Message message = Message(author: valueText, content: x);
       self.send(x);
-      //f.receive(message);
     }
   }
 
