@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/connection.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/workout_items.dart';
 
 typedef FriendListChatCallback = Function(Friend item);
@@ -26,7 +27,14 @@ class FriendListItem extends StatelessWidget {
               width: 100,
               height: 80,
               child: Column(children: [
-                Text("Workout for the day: ${friend.getMessages()}"),
+                //Text("Workout for the day: ${friend.getMessages()}"),
+                ToDoListItem(
+                  //workout: friend.getW().first,
+                  workout: friend.getW().removeLast(),
+                  completed: false,
+                  onDeleteItem: ((item) => Navigator.pop(context)),
+                  onListChanged: (workout, completed) => true,
+                )
               ]),
             ),
             actions: <Widget>[
