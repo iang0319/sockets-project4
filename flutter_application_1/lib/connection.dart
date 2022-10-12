@@ -81,6 +81,11 @@ class Friend extends ChangeNotifier {
       workoutList.add(_messages[i].toString());
     }
     return workoutList.toList();
+    //return workoutList.last();
+  }
+
+  List<Workout> getW() {
+    return _messages;
   }
 
   /*

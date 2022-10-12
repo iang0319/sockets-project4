@@ -30,8 +30,10 @@ class FriendListItem extends StatelessWidget {
                 //Text("Workout for the day: ${friend.getMessages()}"),
                 ToDoListItem(
                   //workout: friend.getW().first,
+                  //not sure if this will iteraye like i think it will
                   workout: friend.getW().removeLast(),
                   completed: false,
+                  //no shot this line even works
                   onDeleteItem: ((item) => Navigator.pop(context)),
                   onListChanged: (workout, completed) => true,
                 )

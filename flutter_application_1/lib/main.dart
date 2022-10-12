@@ -423,14 +423,13 @@ class _JoinPageState extends State<JoinPage> {
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               children: _friends.map((name) {
                 return FriendListItem(
-                    friend: _friends.getFriend(name)!,
-                    content: _friends.getFriend(name)!.getMessage()
-                    //here is where we would access messages/workouts i think
-                    //onListTapped:
+                  friend: _friends.getFriend(name)!,
+                  //here is where we would access messages/workouts i think
+                  //onListTapped:
 
-                    //_friends.getFriend(name).receive(message)
-                    //onListEdited: _handleEditFriend,
-                    );
+                  //_friends.getFriend(name).receive(message)
+                  //onListEdited: _handleEditFriend,
+                );
               }).toList());
         });
   }
@@ -737,7 +736,7 @@ class _ToDoListState extends State<ToDoList> {
     //takes in workout list then loops through each movement
     //converts each movement to json then sends message
     //Whatever this Ip is, this is the only device that can receive information
-    Friend self = Friend(ipAddr: '172.17.5.74', name: 'self');
+    Friend self = Friend(ipAddr: '172.17.7.159', name: 'self');
     Friend f = Friend(ipAddr: loc, name: 'Ian');
     for (int i = 0; i < workouts.length; i++) {
       String x = jsonEncode(workouts[i].toJson());
