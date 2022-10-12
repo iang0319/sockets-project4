@@ -737,6 +737,8 @@ class _ToDoListState extends State<ToDoList> {
     //takes in workout list then loops through each movement
     //converts each movement to json then sends message
     //Whatever this Ip is, this is the only device that can receive information
+    //Ian's IP address: 172.17.5.74
+    //Emulator IP: 10.0.2.16
     Friend self = Friend(ipAddr: '172.17.5.74', name: 'self');
     Friend f = Friend(ipAddr: loc, name: 'Ian');
     for (int i = 0; i < workouts.length; i++) {
