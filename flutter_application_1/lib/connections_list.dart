@@ -25,16 +25,29 @@ class FriendListItem extends StatelessWidget {
             title: const Text('Exercise Info'),
             content: SizedBox(
               width: 100,
-              height: 80,
+              height: 250,
               child: Column(children: [
-                //Text("Workout for the day: ${friend.getMessages()}"),
-                ToDoListItem(
-                  //workout: friend.getW().first,
-                  workout: friend.getW().removeLast(),
-                  completed: false,
-                  onDeleteItem: ((item) => Navigator.pop(context)),
-                  onListChanged: (workout, completed) => true,
-                )
+                Text("Workout for the day: ${friend.getMessages()}"),
+                /*
+                ListView(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  children: friend.getWorkouts().map((workout) {
+                    return ToDoListItem(
+                      workout: workout,
+                      completed: friend.getWorkouts().contains(workout),
+                      //onListChanged: friend.getWorkouts().contains(workout),
+                      //onDeleteItem: friend.getWorkouts().contains(workout),
+                    );
+                  }),
+                ),
+                */
+                //ToDoListItem(
+                //workout: friend.getW().first,
+                //workout: friend.getMessages(),
+                //completed: false,
+                //onDeleteItem: ((item) => Navigator.pop(context)),
+                //onListChanged: (workout, completed) => true,
+                //)
               ]),
             ),
             actions: <Widget>[
